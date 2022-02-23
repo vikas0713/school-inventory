@@ -6,9 +6,9 @@ from student import Student
 from teacher import Teacher
 
 OPTION_MAP = {
-    1: Student.display_options(),
-    2: Teacher.display_options(),
-    3: Standard.display_options()
+    1: Student().display_options,
+    2: Teacher.display_options,
+    3: Standard.display_options
 }
 
 
@@ -24,8 +24,9 @@ def display_options():
 def option_router():
     """routes option according to the input"""
     selected_option = int(input("Enter your option: "))
-    return OPTION_MAP.get(selected_option)
+    return OPTION_MAP.get(selected_option)()
 
 
 if __name__ == '__main__':
     display_options()
+    option_router()
