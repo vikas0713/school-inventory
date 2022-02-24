@@ -14,7 +14,9 @@ class Student:
     def student_option_map(self):
         return {
             1: self.get_list,
-            2: self.add
+            2: self.add,
+            5: self.associate_standard,
+            6: self.get_student_by_standard
         }
 
     def display_options(self):
@@ -23,10 +25,19 @@ class Student:
         print("2. Add Student")
         print("3. Update Student")
         print("4. Delete Student")
+        print("5. Update standard of student")
+        print("6. Get Student BY Standard")
         selected_input = int(input("Select option: "))
         if selected_input == 2:
             name = input("Enter Student name: ")
             self.student_option_map().get(selected_input)(name)
+        elif selected_input == 5:
+            standard_id = int(input("Enter the standard id: "))
+            student_id = int(input("Enter the student id: "))
+            self.student_option_map().get(selected_input)(standard_id, student_id)
+        elif selected_input == 6:
+            standard_id = int(input("Enter the standard id: "))
+            self.student_option_map().get(selected_input)(standard_id)
         else:
             self.student_option_map().get(selected_input)()
 
@@ -45,3 +56,23 @@ class Student:
         connection.commit()
         connection.close()
         print("Successfully added 1 record")
+
+    def associate_standard(self, standard_id, student_id):
+        connection = get_db_cursor()
+        cursor = connection.cursor()
+        cursor.execute(
+            f"UPDATE {self.table} SET standard_id={standard_id} WHERE id={student_id}"
+        )
+        connection.commit()
+        connection.close()
+        print("Successfully updated record")
+
+    def get_student_by_standard(self, standard_id):
+        connection = get_db_cursor()
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM {self.table} WHERE standard_id={standard_id}")
+        for student in cursor.fetchall():
+            print(student[1])
+        connection.commit()
+        connection.close()
+        print("Successfully updated record")
